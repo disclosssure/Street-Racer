@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private MovementController _targetRb;
+    [SerializeField] private Car _targetRb;
     [SerializeField] private float _smoothness;
     [SerializeField] private float _predictionRange;
 

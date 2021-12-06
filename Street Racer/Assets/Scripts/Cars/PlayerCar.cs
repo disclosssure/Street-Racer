@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class MovementController : MonoBehaviour
+public class PlayerCar : Car
 {
-    [SerializeField] private float _speed;
-
+    [Header("Other components")]
     [SerializeField] private InputProvider _input;
     
-    public Vector2 Direction => _direction;
-
-    private Vector3 _direction;
-
     private Rigidbody2D _rb;
     private Camera _mainCamera;
 
@@ -32,14 +25,14 @@ public class MovementController : MonoBehaviour
         Rotate();
     }
 
-    private void Move()
+    public override void Move()
     {
-        _rb.MovePosition(transform.position + _direction * Time.deltaTime * _speed);
+        _rb.MovePosition(transform.position + new Vector3(Direction.x, Direction.y) * Time.deltaTime * CurrentSpeed);
     }
 
     private void Rotate()
     {
-        Vector3 potentialPosition = transform.position + _direction;
+        Vector3 potentialPosition = transform.position + new Vector3(Direction.x, Direction.y);
         Vector2 lookDirection = new Vector2(potentialPosition.x, potentialPosition.y) - _rb.position;
 
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90f;
