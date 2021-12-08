@@ -1,3 +1,3 @@
 using UnityEngine;
 
-public class Grass : MonoBehaviour {}
+public class Grass : MonoBehaviour, IObstacle {}

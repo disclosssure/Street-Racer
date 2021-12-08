@@ -119,9 +119,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentSpeed: 0
-  _startSpeed: 10
-  _maxSpeed: 20
+  _startSpeed: 15
+  _maxSpeed: 30
   _direction: {x: 0, y: 0}
+  _acceleration: 0.5
+  _frequency: 0.2
   _detector: {fileID: 4188039853456121674}
 --- !u!114 &4188039853456121674
 MonoBehaviour:
@@ -135,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7f5de3361a538a43b82d1c78684f059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _frequency: 0.5
   _forwardRayLenght: 10
   _borderRayLenght: 3
   _angleRayLenght: 4

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Car : MonoBehaviour, IMovable, ISpeed, IDirectable
+public abstract class Car : MonoBehaviour, IMovable, ISpeed, IDirectable, IObstacle
 {
     [Header("Speed params")]
     [SerializeField] protected float _currentSpeed;
