@@ -122,7 +122,8 @@ MonoBehaviour:
   _startSpeed: 15
   _maxSpeed: 30
   _direction: {x: 0, y: 0}
-  _acceleration: 0.5
+  _accelerationRate: 1
+  _breakingRate: 2.5
   _frequency: 0.2
   _detector: {fileID: 4188039853456121674}
 --- !u!114 &4188039853456121674
@@ -138,6 +139,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _frequency: 0.5
-  _forwardRayLenght: 10
-  _borderRayLenght: 3
-  _angleRayLenght: 4
+  _forwardRayLenght: 5
+  _borderRayLenght: 0
+  _angleRayLenght: 2

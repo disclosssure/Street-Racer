@@ -21,6 +21,11 @@ public class PlayerCar : Car
         var input = _input.InputAxis;
         _direction = new Vector3(input.x, input.y, 0);
 
+        if(input == Vector2.zero)
+            _currentSpeed = 0;
+        else
+            _currentSpeed = MaxSpeed;
+
         Move();
         Rotate();
     }

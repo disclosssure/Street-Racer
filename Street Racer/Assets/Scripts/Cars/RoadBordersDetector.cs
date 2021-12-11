@@ -42,7 +42,7 @@ public class RoadBordersDetector : MonoBehaviour
     private void CastForwardRay()
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, _forwardRayLenght);
-        if (WasObstacleHit(hit)) OnForwardRayHit?.Invoke(hit);
+        OnForwardRayHit?.Invoke(hit);
     }
 
     private void CastAngleRays()
@@ -50,10 +50,10 @@ public class RoadBordersDetector : MonoBehaviour
         RaycastHit2D hit;
 
         hit = Physics2D.Raycast(transform.position, -transform.right, _borderRayLenght);
-        if (WasObstacleHit(hit)) OnLeftForwardRayHit?.Invoke(hit);
+        OnLeftRayHit?.Invoke(hit);
 
         hit = Physics2D.Raycast(transform.position, transform.right, _borderRayLenght);
-        if (WasObstacleHit(hit)) OnRightForwardRayHit?.Invoke(hit);
+        OnRightRayHit?.Invoke(hit);
     }
 
     private void CastSideRays()
@@ -61,10 +61,10 @@ public class RoadBordersDetector : MonoBehaviour
         RaycastHit2D hit;
 
         hit = Physics2D.Raycast(transform.position, (transform.up - transform.right).normalized, _angleRayLenght);
-        if (WasObstacleHit(hit)) OnLeftRayHit?.Invoke(hit);
+        OnLeftForwardRayHit?.Invoke(hit);
 
         hit = Physics2D.Raycast(transform.position, (transform.up + transform.right).normalized, _angleRayLenght);
-        if (WasObstacleHit(hit)) OnRightRayHit?.Invoke(hit);
+        OnRightForwardRayHit?.Invoke(hit);
     }
 
     private bool WasObstacleHit(RaycastHit2D hit)

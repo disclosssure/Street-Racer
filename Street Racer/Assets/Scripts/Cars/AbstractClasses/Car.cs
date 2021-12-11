@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Car : MonoBehaviour, IMovable, ISpeed, IDirectable, IObstacle
@@ -16,11 +17,30 @@ public abstract class Car : MonoBehaviour, IMovable, ISpeed, IDirectable, IObsta
 
     public Vector2 Direction => _direction.normalized;
 
-
     protected virtual void Awake()
     {
         _currentSpeed = _startSpeed;
     }
 
     public abstract void Move();
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.GetComponent<Pedestrian>())
+        {
+            StartCoroutine(KillPedestrian());
+        }
+    }
+
+    private IEnumerator KillPedestrian()
+    {
+        float maxSpeed = _maxSpeed;
+        float currentSpeedpeed = _currentSpeed;
+        _currentSpeed = 0;
+        _maxSpeed = 0;
+
+        yield return new WaitForSeconds(3f);
+        _maxSpeed = maxSpeed;
+        _currentSpeed = _startSpeed;
+    }
 }

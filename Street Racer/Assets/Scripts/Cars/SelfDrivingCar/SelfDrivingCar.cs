@@ -7,8 +7,8 @@ using UnityEngine;
 public class SelfDrivingCar : Car
 {
     [Header("Moving params")]
-    [SerializeField]
-    private float _acceleration;
+    [SerializeField] private float _accelerationRate;
+    [SerializeField] private float _breakingRate;
 
     [SerializeField] private float _frequency;
 
@@ -16,7 +16,7 @@ public class SelfDrivingCar : Car
     [SerializeField]
     private RoadBordersDetector _detector;
 
-    private MovingState State = MovingState.None;
+    private CarMovingState State = Enums.CarMovingState.None;
 
     private Coroutine _coroutine;
 
@@ -36,7 +36,7 @@ public class SelfDrivingCar : Car
         _detector.OnLeftForwardRayHit += HandleLeftForwardRaycast;
         _detector.OnRightForwardRayHit += HandleRightForwardRaycast;
         _detector.OnLeftRayHit += HandleLeftRaycast;
-        _detector.OnRightRayHit += HandleLeftRaycast;
+        _detector.OnRightRayHit += HandleRightRaycast;
     }
 
     private void OnDisable()
@@ -45,26 +45,25 @@ public class SelfDrivingCar : Car
         _detector.OnLeftForwardRayHit -= HandleLeftForwardRaycast;
         _detector.OnRightForwardRayHit -= HandleRightForwardRaycast;
         _detector.OnLeftRayHit -= HandleLeftRaycast;
-        _detector.OnRightRayHit -= HandleLeftRaycast;
+        _detector.OnRightRayHit -= HandleRightRaycast;
     }
 
     private void Update()
     {
         Move();
         Rotate();
-        Accelerate();
     }
 
     private void Accelerate()
     {
-        if (State == MovingState.Accelerating) return;
+        if (State == Enums.CarMovingState.Accelerating) return;
 
         if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
         }
 
-        State = MovingState.Accelerating;
+        State = Enums.CarMovingState.Accelerating;
         _coroutine = StartCoroutine(AccelerateCoroutine());
     }
 
@@ -72,21 +71,21 @@ public class SelfDrivingCar : Car
     {
         while (true)
         {
-            AdjustSpeed(_acceleration);
+            AdjustSpeed(_accelerationRate);
             yield return new WaitForSeconds(_frequency);
         }
     }
 
     private void Break()
     {
-        if (State == MovingState.Breaking) return;
+        if (State == Enums.CarMovingState.Breaking) return;
 
         if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
         }
 
-        State = MovingState.Breaking;
+        State = Enums.CarMovingState.Breaking;
         _coroutine = StartCoroutine(BreakCoroutine());
     }
 
@@ -94,7 +93,7 @@ public class SelfDrivingCar : Car
     {
         while (true)
         {
-            AdjustSpeed(-_acceleration);
+            AdjustSpeed(-_breakingRate);
             yield return new WaitForSeconds(_frequency);
         }
     }
@@ -112,7 +111,8 @@ public class SelfDrivingCar : Car
 
     private void Rotate()
     {
-        if (Direction.magnitude == 0) return;
+        if (Direction.magnitude == 0)
+            return;
 
         Vector3 potentialPosition = transform.position + new Vector3(Direction.x, Direction.y);
         Vector2 lookDirection = new Vector2(potentialPosition.x, potentialPosition.y) - _rb.position;
@@ -123,21 +123,45 @@ public class SelfDrivingCar : Car
 
     private void HandleForwardRaycast(RaycastHit2D hit)
     {
-        Break();
+        if (hit.transform)
+        {
+            Break();
+        }
+        else
+        {
+            Accelerate();
+        }
     }
 
     private void HandleLeftForwardRaycast(RaycastHit2D hit)
     {
-        Debug.Log(hit.transform.name);
+        if (hit.transform)
+        {
+            _direction = (transform.up + transform.right).normalized;
+        }
     }
 
     private void HandleRightForwardRaycast(RaycastHit2D hit)
     {
-        Debug.Log(hit.transform.name);
+        if (hit.transform)
+        {
+            _direction = (transform.up - transform.right).normalized;
+        }
     }
 
     private void HandleLeftRaycast(RaycastHit2D hit)
     {
-        Debug.Log(hit.transform.name);
+        // if (!hit.transform && CurrentSpeed <= 5)
+        // {
+        //     _direction = -transform.right;
+        // }
+    }
+
+    private void HandleRightRaycast(RaycastHit2D hit)
+    {
+        // if (!hit.transform && CurrentSpeed <= 5)
+        // {
+        //     _direction = transform.right;
+        // }
     }
 }
